@@ -8,9 +8,9 @@ import streamlit as st
 import requests
 from bs4 import BeautifulSoup
 import google.generativeai as genai
+import os
 
-# Configure Gemini
-genai.configure(api_key="AIzaSyDcLI-5WhXqotRUKZHGRHj_Y5OuEsZecwc")
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("models/gemini-flash-latest")
 
 st.title("Newsletter Generator (Gemini + Streamlit)")
