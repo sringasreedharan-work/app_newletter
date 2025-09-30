@@ -13,11 +13,11 @@ import os
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("models/gemini-flash-latest")
 
-st.title("Newsletter Generator (Gemini + Streamlit)")
+st.title("Article Summarizer: Get Headline & Short Story from a URL")
 
 url = st.text_input("Enter article URL")
 
-if st.button("Generate Newsletter"):
+if st.button("Get Headline & Story"):
     try:
         r = requests.get(url, timeout=10)
         soup = BeautifulSoup(r.text, "html.parser")
