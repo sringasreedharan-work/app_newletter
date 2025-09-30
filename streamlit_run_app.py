@@ -1,0 +1,52 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[3]:
+
+
+import streamlit as st
+import requests
+from bs4 import BeautifulSoup
+import google.generativeai as genai
+
+# Configure Gemini
+genai.configure(api_key="AIzaSyDcLI-5WhXqotRUKZHGRHj_Y5OuEsZecwc")
+model = genai.GenerativeModel("models/gemini-flash-latest")
+
+st.title("Newsletter Generator (Gemini + Streamlit)")
+
+url = st.text_input("Enter article URL")
+
+if st.button("Generate Newsletter"):
+    try:
+        r = requests.get(url, timeout=10)
+        soup = BeautifulSoup(r.text, "html.parser")
+        paragraphs = [p.get_text() for p in soup.find_all("p")]
+        article_text = " ".join(paragraphs[:20])
+
+        prompt = f"""
+        You are a newsletter writer.
+        Summarize the following article into a newsletter format.
+
+        Output must be:
+        Heading: <catchy headline>
+        Story: <2–3 sentence summary>
+
+        Article:
+        {article_text}
+        """
+
+        response = model.generate_content(prompt)
+
+        st.subheader("Newsletter")
+        st.write(response.text.strip())
+
+    except Exception as e:
+        st.error(f"Error: {e}")
+
+
+# In[ ]:
+
+
+
+
